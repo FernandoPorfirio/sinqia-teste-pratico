@@ -1,0 +1,84 @@
+# -----------------------------------
+# C# / .NET
+# -----------------------------------
+bin/
+obj/
+*.user
+*.rsuser
+*.suo
+*.cache
+*.log
+*.dbmdl
+*.pdb
+*.vspx
+*.vsp
+*.vspscc
+*.vssscc
+*.pidb
+*.svclog
+TestResult.xml
+*.db
+
+# ASP.NET Secrets
+secrets.json
+
+# Build results
+*.dll
+*.exe
+*.app
+*.msi
+
+# Rider and VS Code
+.idea/
+.vscode/
+*.code-workspace
+
+# NuGet Packages
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# dotnet CLI
+project.assets.json
+artifacts/
+
+# Entity Framework
+Migrations/
+
+# -----------------------------------
+# Node.js / React (Frontend)
+# -----------------------------------
+node_modules/
+dist/
+build/
+.env
+.npmrc
+yarn.lock
+pnpm-lock.yaml
+package-lock.json
+
+# Cache
+.cache/
+.next/
+.out/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+# -----------------------------------
+# Outros arquivos
+# -----------------------------------
+*.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+*.log
+*.bak
+*.old
+*.orig
+
+sinqia-teste-pratico.sln
