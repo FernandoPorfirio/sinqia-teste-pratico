@@ -43,9 +43,6 @@ project.fragment.lock.json
 project.assets.json
 artifacts/
 
-# Entity Framework
-Migrations/
-
 # -----------------------------------
 # Node.js / React (Frontend)
 # -----------------------------------
