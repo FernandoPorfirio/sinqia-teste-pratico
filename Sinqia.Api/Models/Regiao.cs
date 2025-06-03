@@ -1,6 +1,13 @@
-public class Regiao
+using System.Text.Json.Serialization;
+
+namespace Sinqia.Api.Models
 {
-    public int Id { get; set; }
-    public string Nome { get; set; }
-    public ICollection<Estado> Estados { get; set; }
+    public class Regiao
+    {
+        public int Id { get; set; }
+        public string Nome { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Estado> Estados { get; set; }
+    }
 }
