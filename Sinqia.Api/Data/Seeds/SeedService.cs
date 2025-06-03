@@ -1,11 +1,12 @@
 using System.Text.Json;
+using Sinqia.Api.Data;
+using Sinqia.Api.Models;
 
 public static class SeedService
 {
-    public static void SeedData(AppDbContext context)
+    public static void SeedData(DataContext  context)
     {
-        if (!context.Regioes.Any())
-        {
+        if (!context.Regioes.Any()) {
             var jsonPath = Path.Combine("Data", "Seeds", "regioes_estados_cidades.json");
             var json = File.ReadAllText(jsonPath);
             var regioes = JsonSerializer.Deserialize<List<RegiaoInput>>(json);
