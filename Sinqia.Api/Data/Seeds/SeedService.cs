@@ -4,10 +4,8 @@ public static class SeedService
 {
     public static void SeedData(AppDbContext context)
     {
-        Console.WriteLine("SeedData");
         if (!context.Regioes.Any())
         {
-            Console.WriteLine("Seed2");
             var jsonPath = Path.Combine("Data", "Seeds", "regioes_estados_cidades.json");
             var json = File.ReadAllText(jsonPath);
             var regioes = JsonSerializer.Deserialize<List<RegiaoInput>>(json);
