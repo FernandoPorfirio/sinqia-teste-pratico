@@ -1,30 +1,45 @@
+import { useState, useEffect } from "react";
 import FiltrosPontosTuristicos from "./components/FiltrosPontosTuristicos";
 import TabelaPontosTuristicos from "./components/TabelaPontosTuristicos";
-import ModalPontoTuristico from "./components/ModalPontoTuristico";
-import ModalConfirmarExclusao from "./components/ModalConfirmarExclusao";
-import { useState } from "react";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import { listarPontosTuristicos } from "@/services/pontosTuristicosService";
 
 export default function PontosTuristicosContainer() {
-  // Aqui você vai colocar os estados e lógica de dados
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalExcluirOpen, setModalExcluirOpen] = useState(false);
+  const [filtros, setFiltros] = useState({
+    regiaoId: "",
+    estadoId: "",
+    cidadeId: "",
+    search: "",
+    page: 1,
+    limit: 10,
+  });
+  const [dados, setDados] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    listarPontosTuristicos(filtros)
+      .then((res) => {
+        console.log('Dados recebidos:', res.data);
+        setDados(res.data.data);
+        setTotal(res.data.total);
+      })
+      .finally(() => setLoading(false));
+  }, [filtros]);
 
   return (
     <>
-      <Typography variant="h4" gutterBottom>
-        Pontos Turísticos
-      </Typography>
-      <Box sx={{ bgcolor: 'background.paper', p: 3, borderRadius: 2, minHeight: 300 }}>
-        <FiltrosPontosTuristicos />
-        <TabelaPontosTuristicos 
-          onEdit={() => setModalOpen(true)} 
-          onDelete={() => setModalExcluirOpen(true)} 
-        />
-      </Box>
-      <ModalPontoTuristico open={modalOpen} onClose={() => setModalOpen(false)} />
-      <ModalConfirmarExclusao open={modalExcluirOpen} onClose={() => setModalExcluirOpen(false)} />
+      <FiltrosPontosTuristicos filtros={filtros} setFiltros={setFiltros} />
+      <TabelaPontosTuristicos
+        rows={dados}
+        rowCount={total}
+        loading={loading}
+        page={filtros.page}
+        pageSize={filtros.limit}
+        onPageChange={(page) => setFiltros(f => ({ ...f, page }))}
+        onPageSizeChange={(limit) => setFiltros(f => ({ ...f, limit }))}
+        // onEdit, onDelete...
+      />
     </>
   );
 }
