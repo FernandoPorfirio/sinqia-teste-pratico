@@ -59,24 +59,42 @@ export default function ModalPontoTuristico({
   }, [form.estadoId]);
 
   useEffect(() => {
+    setForm({
+      nome: "",
+      descricao: "",
+      localizacao: "",
+      regiaoId: "",
+      estadoId: "",
+      cidadeId: "",
+    });
+
     if (open && ponto) {
-      setForm({
+      const regiaoId = ponto.cidade?.estado?.regiao?.id || "";
+      const estadoId = ponto.cidade?.estado?.id || "";
+      const cidadeId = ponto.cidade?.id || "";
+
+      setForm((f) => ({
+        ...f,
         nome: ponto.nome || "",
         descricao: ponto.descricao || "",
         localizacao: ponto.localizacao || "",
-        regiaoId: ponto.regiaoId || "",
-        estadoId: ponto.estadoId || "",
-        cidadeId: ponto.cidadeId || "",
-      });
-    } else if (open) {
-      setForm({
-        nome: "",
-        descricao: "",
-        localizacao: "",
-        regiaoId: "",
+        regiaoId: regiaoId,
         estadoId: "",
         cidadeId: "",
-      });
+      }));
+
+      if (regiaoId) {
+        listarEstados(regiaoId).then((resEstados) => {
+          setEstados(resEstados.data);
+          setForm((f) => ({ ...f, estadoId: estadoId }));
+          if (estadoId) {
+            listarCidades(estadoId).then((resCidades) => {
+              setCidades(resCidades.data);
+              setForm((f) => ({ ...f, cidadeId: cidadeId }));
+            });
+          }
+        });
+      }
     }
   }, [open, ponto]);
 
