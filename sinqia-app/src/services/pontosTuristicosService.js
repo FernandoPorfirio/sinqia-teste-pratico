@@ -2,8 +2,28 @@ import axios from "axios";
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/pontoturistico`;
 
-export const listarPontosTuristicos = (filtros) =>
-  axios.get(API_URL, { params: filtros });
+export const listarPontosTuristicos = ({
+  regiaoId,
+  estadoId,
+  cidadeId,
+  search = "",
+  page = 1,
+  limit = 10,
+}) => {
+  let url = API_URL;
+
+  if (regiaoId && estadoId && cidadeId) {
+    url += `/regiao/${regiaoId}/estado/${estadoId}/cidade/${cidadeId}/search/${search}/page/${page}/limit/${limit}`;
+  } else if (regiaoId && estadoId) {
+    url += `/regiao/${regiaoId}/estado/${estadoId}/search/${search}/page/${page}/limit/${limit}`;
+  } else if (regiaoId) {
+    url += `/regiao/${regiaoId}/search/${search}/page/${page}/limit/${limit}`;
+  } else {
+    url += `/search/${search}/page/${page}/limit/${limit}`;
+  }
+
+  return axios.get(url);
+};
 
 export const buscarPontoTuristico = (id) =>
   axios.get(`${API_URL}/${id}`);
