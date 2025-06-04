@@ -10,29 +10,23 @@ export const listarPontosTuristicos = ({
   page = 1,
   limit = 10,
 }) => {
-  let url = API_URL;
+  const params = {};
 
-  if (regiaoId && estadoId && cidadeId) {
-    url += `/regiao/${regiaoId}/estado/${estadoId}/cidade/${cidadeId}/search/${search}/page/${page}/limit/${limit}`;
-  } else if (regiaoId && estadoId) {
-    url += `/regiao/${regiaoId}/estado/${estadoId}/search/${search}/page/${page}/limit/${limit}`;
-  } else if (regiaoId) {
-    url += `/regiao/${regiaoId}/search/${search}/page/${page}/limit/${limit}`;
-  } else {
-    url += `/search/${search}/page/${page}/limit/${limit}`;
-  }
+  if (regiaoId) params.regiaoId = regiaoId;
+  if (estadoId) params.estadoId = estadoId;
+  if (cidadeId) params.cidadeId = cidadeId;
+  if (search && search.trim() !== "") params.search = search;
+  params.page = page;
+  params.limit = limit;
 
-  return axios.get(url);
+  return axios.get(`${API_URL}/search`, { params });
 };
 
-export const buscarPontoTuristico = (id) =>
-  axios.get(`${API_URL}/${id}`);
+export const buscarPontoTuristico = (id) => axios.get(`${API_URL}/${id}`);
 
-export const criarPontoTuristico = (dados) =>
-  axios.post(API_URL, dados);
+export const criarPontoTuristico = (dados) => axios.post(API_URL, dados);
 
 export const atualizarPontoTuristico = (id, dados) =>
   axios.put(`${API_URL}/${id}`, dados);
 
-export const removerPontoTuristico = (id) =>
-  axios.delete(`${API_URL}/${id}`);
+export const removerPontoTuristico = (id) => axios.delete(`${API_URL}/${id}`);
