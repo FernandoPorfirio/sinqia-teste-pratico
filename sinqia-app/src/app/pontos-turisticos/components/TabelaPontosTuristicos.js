@@ -1,16 +1,17 @@
 import React from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-  TablePagination,
-  Box,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CircularProgress from "@mui/material/CircularProgress";
+import TablePagination from "@mui/material/TablePagination";
 
 export default function TabelaPontosTuristicos({
   rows,
@@ -23,15 +24,6 @@ export default function TabelaPontosTuristicos({
   onEdit,
   onDelete,
 }) {
-  // Adiciona handlers nas linhas
-  const rowsWithHandlers = rows.map((row) => ({
-    ...row,
-    cidadeNome: row.cidade?.nome,
-    estadoSigla: row.cidade?.estado?.sigla,
-    onEdit,
-    onDelete,
-  }));
-
   return (
     <Box sx={{ width: "100%" }}>
       <TableContainer component={Paper}>
@@ -51,35 +43,41 @@ export default function TabelaPontosTuristicos({
             {loading ? (
               <TableRow>
                 <TableCell colSpan={7} align="center">
-                  Carregando...
+                  <CircularProgress size={24} />
                 </TableCell>
               </TableRow>
-            ) : rowsWithHandlers.length === 0 ? (
+            ) : rows.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} align="center">
-                  Nenhum registro encontrado
+                  Nenhum registro encontrado.
                 </TableCell>
               </TableRow>
             ) : (
-              rowsWithHandlers.map((row) => (
+              rows.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>{row.id}</TableCell>
                   <TableCell>{row.nome}</TableCell>
                   <TableCell>{row.descricao}</TableCell>
-                  <TableCell>{row.localizacao}</TableCell>
-                  <TableCell>{row.cidadeNome}</TableCell>
-                  <TableCell>{row.estadoSigla}</TableCell>
+                  <TableCell>
+                    {row.cidade?.nome}, {row.cidade?.estado?.sigla}
+                  </TableCell>
+                  <TableCell>{row.cidade?.nome}</TableCell>
+                  <TableCell>{row.cidade?.estado?.sigla}</TableCell>
                   <TableCell align="right">
-                    <Button size="small" onClick={() => onEdit(row)}>
-                      Editar
-                    </Button>
-                    <Button
+                    <IconButton
+                      color="primary"
+                      onClick={() => onEdit(row)}
                       size="small"
-                      color="error"
-                      onClick={() => onDelete(row)}
                     >
-                      Excluir
-                    </Button>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={() => onDelete(row.id)}
+                      size="small"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))
@@ -93,10 +91,8 @@ export default function TabelaPontosTuristicos({
         page={page - 1}
         onPageChange={(_, newPage) => onPageChange(newPage + 1)}
         rowsPerPage={pageSize}
-        onRowsPerPageChange={(e) =>
-          onPageSizeChange(parseInt(e.target.value, 10))
-        }
-        rowsPerPageOptions={[5, 10, 20]}
+        onRowsPerPageChange={(e) => onPageSizeChange(parseInt(e.target.value, 10))}
+        rowsPerPageOptions={[5, 10, 20, 50]}
       />
     </Box>
   );
