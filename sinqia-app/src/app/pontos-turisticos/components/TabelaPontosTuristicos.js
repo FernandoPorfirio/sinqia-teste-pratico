@@ -1,49 +1,102 @@
-import { DataGrid } from "@mui/x-data-grid";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
+import React from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  TablePagination,
+  Box,
+} from "@mui/material";
 
-const columns = [
-  { field: "id", headerName: "ID", width: 70 },
-  { field: "nome", headerName: "Nome", width: 200 },
-  { field: "cidade", headerName: "Cidade", width: 150 },
-  { field: "estado", headerName: "Estado", width: 100 },
-  { field: "categoria", headerName: "Categoria", width: 150 },
-  {
-    field: "acoes",
-    headerName: "Ações",
-    width: 180,
-    renderCell: (params) => (
-      <>
-        <Button size="small" onClick={params.row.onEdit}>Editar</Button>
-        <Button size="small" color="error" onClick={params.row.onDelete}>Excluir</Button>
-      </>
-    ),
-    sortable: false,
-    filterable: false,
-  },
-];
-
-const rows = [
-  { id: 1, nome: "Cristo Redentor", cidade: "Rio de Janeiro", estado: "RJ", categoria: "Monumento" },
-  // ...adicione mais dados fictícios
-];
-
-export default function TabelaPontosTuristicos({ onEdit, onDelete }) {
+export default function TabelaPontosTuristicos({
+  rows,
+  rowCount,
+  loading,
+  page,
+  pageSize,
+  onPageChange,
+  onPageSizeChange,
+  onEdit,
+  onDelete,
+}) {
   // Adiciona handlers nas linhas
-  const rowsWithHandlers = rows.map(row => ({
+  const rowsWithHandlers = rows.map((row) => ({
     ...row,
-    onEdit: () => onEdit(row),
-    onDelete: () => onDelete(row),
+    cidadeNome: row.cidade?.nome,
+    estadoSigla: row.cidade?.estado?.sigla,
+    onEdit,
+    onDelete,
   }));
 
   return (
-    <Box sx={{ height: 400, width: "100%" }}>
-      <DataGrid
-        rows={rowsWithHandlers}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        disableSelectionOnClick
+    <Box sx={{ width: "100%" }}>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Nome</TableCell>
+              <TableCell>Descrição</TableCell>
+              <TableCell>Localização</TableCell>
+              <TableCell>Cidade</TableCell>
+              <TableCell>Estado</TableCell>
+              <TableCell align="right">Ações</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={7} align="center">
+                  Carregando...
+                </TableCell>
+              </TableRow>
+            ) : rowsWithHandlers.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} align="center">
+                  Nenhum registro encontrado
+                </TableCell>
+              </TableRow>
+            ) : (
+              rowsWithHandlers.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.id}</TableCell>
+                  <TableCell>{row.nome}</TableCell>
+                  <TableCell>{row.descricao}</TableCell>
+                  <TableCell>{row.localizacao}</TableCell>
+                  <TableCell>{row.cidadeNome}</TableCell>
+                  <TableCell>{row.estadoSigla}</TableCell>
+                  <TableCell align="right">
+                    <Button size="small" onClick={() => onEdit(row)}>
+                      Editar
+                    </Button>
+                    <Button
+                      size="small"
+                      color="error"
+                      onClick={() => onDelete(row)}
+                    >
+                      Excluir
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        component="div"
+        count={rowCount}
+        page={page - 1}
+        onPageChange={(_, newPage) => onPageChange(newPage + 1)}
+        rowsPerPage={pageSize}
+        onRowsPerPageChange={(e) =>
+          onPageSizeChange(parseInt(e.target.value, 10))
+        }
+        rowsPerPageOptions={[5, 10, 20]}
       />
     </Box>
   );
