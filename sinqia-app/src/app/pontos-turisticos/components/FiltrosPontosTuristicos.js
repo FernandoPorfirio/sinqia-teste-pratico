@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
 import { listarRegioes } from "@/services/regioesService";
 import { listarEstados } from "@/services/estadosService";
 import { listarCidades } from "@/services/cidadesService";
 
-export default function FiltrosPontosTuristicos({ filtros, setFiltros }) {
+export default function FiltrosPontosTuristicos({
+  filtros,
+  setFiltros,
+  onAbrirModal,
+}) {
   const [regioes, setRegioes] = useState([]);
   const [estados, setEstados] = useState([]);
   const [cidades, setCidades] = useState([]);
@@ -35,7 +39,11 @@ export default function FiltrosPontosTuristicos({ filtros, setFiltros }) {
     }
   }, [filtros.estadoId]);
 
-  const inputSx = { minWidth: 150, height: 40, "& .MuiInputBase-root": { height: 40 } };
+  const inputSx = {
+    minWidth: 150,
+    height: 40,
+    "& .MuiInputBase-root": { height: 40 },
+  };
 
   return (
     <Box sx={{ display: "flex", gap: 2, mb: 2, alignItems: "center" }}>
@@ -117,29 +125,41 @@ export default function FiltrosPontosTuristicos({ filtros, setFiltros }) {
           </MenuItem>
         ))}
       </TextField>
-      <Button
-        variant="contained"
-        sx={{ height: 40, minWidth: 90 }}
-        onClick={() => setFiltros((f) => ({ ...f, page: 1 }))}
-      >
-        Filtrar
-      </Button>
-      <Button
-        variant="outlined"
-        sx={{ height: 40, minWidth: 90 }}
-        onClick={() =>
-          setFiltros({
-            regiaoId: "",
-            estadoId: "",
-            cidadeId: "",
-            search: "",
-            page: 1,
-            limit: 10,
-          })
-        }
-      >
-        Limpar
-      </Button>
+      <Box sx={{ display: "flex", gap: 2 }}>
+        <Button
+          variant="contained"
+          sx={{ height: 40, minWidth: 90 }}
+          onClick={() => setFiltros((f) => ({ ...f, page: 1 }))}
+        >
+          Filtrar
+        </Button>
+        <Button
+          variant="outlined"
+          sx={{ height: 40, minWidth: 90 }}
+          onClick={() =>
+            setFiltros({
+              regiaoId: "",
+              estadoId: "",
+              cidadeId: "",
+              search: "",
+              page: 1,
+              limit: 10,
+            })
+          }
+        >
+          Limpar
+        </Button>
+      </Box>
+      <Box sx={{ ml: "auto" }}>
+        <Button
+          variant="contained"
+          color="success"
+          sx={{ height: 40, minWidth: 120 }}
+          onClick={onAbrirModal}
+        >
+          Cadastrar
+        </Button>
+      </Box>
     </Box>
   );
 }
