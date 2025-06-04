@@ -24,10 +24,12 @@ export default function ModalPontoTuristico({
   const [form, setForm] = useState({
     nome: "",
     descricao: "",
+    localizacao: "",
     regiaoId: "",
     estadoId: "",
     cidadeId: "",
   });
+  const [errors, setErrors] = useState({});
   const [regioes, setRegioes] = useState([]);
   const [estados, setEstados] = useState([]);
   const [cidades, setCidades] = useState([]);
@@ -61,6 +63,7 @@ export default function ModalPontoTuristico({
       setForm({
         nome: ponto.nome || "",
         descricao: ponto.descricao || "",
+        localizacao: ponto.localizacao || "",
         regiaoId: ponto.regiaoId || "",
         estadoId: ponto.estadoId || "",
         cidadeId: ponto.cidadeId || "",
@@ -69,6 +72,7 @@ export default function ModalPontoTuristico({
       setForm({
         nome: "",
         descricao: "",
+        localizacao: "",
         regiaoId: "",
         estadoId: "",
         cidadeId: "",
@@ -76,16 +80,34 @@ export default function ModalPontoTuristico({
     }
   }, [open, ponto]);
 
+  const validate = () => {
+    const newErrors = {};
+    if (!form.nome) newErrors.nome = "Nome é obrigatório";
+    else if (form.nome.length > 100) newErrors.nome = "Máximo 100 caracteres";
+    if (!form.descricao) newErrors.descricao = "Descrição é obrigatória";
+    else if (form.descricao.length > 100)
+      newErrors.descricao = "Máximo 100 caracteres";
+    if (!form.localizacao) newErrors.localizacao = "Localização é obrigatória";
+    else if (form.localizacao.length > 100)
+      newErrors.localizacao = "Máximo 100 caracteres";
+    if (!form.regiaoId) newErrors.regiaoId = "Região é obrigatória";
+    if (!form.estadoId) newErrors.estadoId = "Estado é obrigatório";
+    if (!form.cidadeId) newErrors.cidadeId = "Cidade é obrigatória";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
   };
 
   const handleSubmit = async () => {
+    if (!validate()) return;
     setLoading(true);
     try {
       if (isEdit) {
-        await atualizarPontoTuristico(ponto.id, form);
+        await atualizarPontoTuristico(ponto.id, { ...form, id: ponto.id });
       } else {
         await criarPontoTuristico(form);
       }
@@ -102,13 +124,18 @@ export default function ModalPontoTuristico({
       <DialogTitle>
         {isEdit ? "Editar Ponto Turístico" : "Cadastrar Ponto Turístico"}
       </DialogTitle>
-      <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
+      <DialogContent
+        sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+      >
         <TextField
           label="Nome"
           name="nome"
           value={form.nome}
           onChange={handleChange}
           fullWidth
+          error={!!errors.nome}
+          helperText={errors.nome}
+          inputProps={{ maxLength: 100 }}
         />
         <TextField
           label="Descrição"
@@ -118,6 +145,19 @@ export default function ModalPontoTuristico({
           fullWidth
           multiline
           minRows={2}
+          error={!!errors.descricao}
+          helperText={errors.descricao}
+          inputProps={{ maxLength: 100 }}
+        />
+        <TextField
+          label="Localização"
+          name="localizacao"
+          value={form.localizacao}
+          onChange={handleChange}
+          fullWidth
+          error={!!errors.localizacao}
+          helperText={errors.localizacao}
+          inputProps={{ maxLength: 100 }}
         />
         <TextField
           select
@@ -174,7 +214,15 @@ export default function ModalPontoTuristico({
         <Button
           onClick={handleSubmit}
           variant="contained"
-          disabled={loading || !form.nome || !form.regiaoId || !form.estadoId || !form.cidadeId}
+          disabled={
+            loading ||
+            !form.nome ||
+            !form.descricao ||
+            !form.localizacao ||
+            !form.regiaoId ||
+            !form.estadoId ||
+            !form.cidadeId
+          }
         >
           Salvar
         </Button>
