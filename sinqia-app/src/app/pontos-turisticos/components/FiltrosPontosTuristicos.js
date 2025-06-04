@@ -35,8 +35,20 @@ export default function FiltrosPontosTuristicos({ filtros, setFiltros }) {
     }
   }, [filtros.estadoId]);
 
+  const inputSx = { minWidth: 150, height: 40, "& .MuiInputBase-root": { height: 40 } };
+
   return (
-    <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+    <Box sx={{ display: "flex", gap: 2, mb: 2, alignItems: "center" }}>
+      <TextField
+        label="Buscar"
+        variant="outlined"
+        size="small"
+        value={filtros.search}
+        onChange={(e) =>
+          setFiltros((f) => ({ ...f, search: e.target.value, page: 1 }))
+        }
+        sx={{ minWidth: 220, ...inputSx }}
+      />
       <TextField
         select
         label="Região"
@@ -50,7 +62,8 @@ export default function FiltrosPontosTuristicos({ filtros, setFiltros }) {
             page: 1,
           }))
         }
-        sx={{ minWidth: 150 }}
+        sx={inputSx}
+        size="small"
       >
         <MenuItem value="">Todas</MenuItem>
         {regioes.map((regiao) => (
@@ -71,7 +84,8 @@ export default function FiltrosPontosTuristicos({ filtros, setFiltros }) {
             page: 1,
           }))
         }
-        sx={{ minWidth: 150 }}
+        sx={inputSx}
+        size="small"
         disabled={!filtros.regiaoId}
       >
         <MenuItem value="">Todos</MenuItem>
@@ -92,7 +106,8 @@ export default function FiltrosPontosTuristicos({ filtros, setFiltros }) {
             page: 1,
           }))
         }
-        sx={{ minWidth: 150 }}
+        sx={inputSx}
+        size="small"
         disabled={!filtros.estadoId}
       >
         <MenuItem value="">Todas</MenuItem>
@@ -102,24 +117,16 @@ export default function FiltrosPontosTuristicos({ filtros, setFiltros }) {
           </MenuItem>
         ))}
       </TextField>
-      <TextField
-        label="Buscar"
-        variant="outlined"
-        size="small"
-        value={filtros.search}
-        onChange={(e) =>
-          setFiltros((f) => ({ ...f, search: e.target.value, page: 1 }))
-        }
-        sx={{ minWidth: 300 }}
-      />
       <Button
         variant="contained"
+        sx={{ height: 40, minWidth: 90 }}
         onClick={() => setFiltros((f) => ({ ...f, page: 1 }))}
       >
         Filtrar
       </Button>
       <Button
         variant="outlined"
+        sx={{ height: 40, minWidth: 90 }}
         onClick={() =>
           setFiltros({
             regiaoId: "",
