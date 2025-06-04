@@ -47,6 +47,11 @@ app.MapGet("/weatherforecast", () =>
 
 app.MapControllers();
 
+app.UseCors(builder =>
+    builder.AllowAnyOrigin()
+           .AllowAnyHeader()
+           .AllowAnyMethod());
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
