@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import Header from "../../components/base/Header";
 import Footer from "../../components/base/Footer";
 import Sidebar from "../../components/base/Sidebar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import { useState } from "react";
+import PontosTuristicosContainer from "./PontosTuristicosContainer";
 
 export default function PontosTuristicosPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -20,7 +22,9 @@ export default function PontosTuristicosPage() {
             <MenuIcon />
           </IconButton>
         </div>
-        <div className="flex-1 p-8">teste</div>
+        <Container maxWidth="xl" sx={{ py: 4 }}>
+          <PontosTuristicosContainer />
+        </Container>
       </div>
       <Footer />
     </div>
