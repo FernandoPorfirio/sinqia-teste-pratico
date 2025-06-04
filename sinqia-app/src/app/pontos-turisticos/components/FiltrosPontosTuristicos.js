@@ -24,7 +24,7 @@ export default function FiltrosPontosTuristicos({
     if (filtros.regiaoId) {
       listarEstados(filtros.regiaoId).then((res) => setEstados(res.data));
     } else {
-      setEstados([]);
+      listarEstados().then((res) => setEstados(res.data));
       setCidades([]);
       setFiltros((f) => ({ ...f, estadoId: "", cidadeId: "" }));
     }
@@ -94,7 +94,6 @@ export default function FiltrosPontosTuristicos({
         }
         sx={inputSx}
         size="small"
-        disabled={!filtros.regiaoId}
       >
         <MenuItem value="">Todos</MenuItem>
         {estados.map((estado) => (
