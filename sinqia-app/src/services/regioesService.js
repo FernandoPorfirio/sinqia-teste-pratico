@@ -1,5 +1,5 @@
 import axios from "axios";
 
-const API_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/regiao`;
+const API_URL = `http://localhost:5101/api/regiao`;
 
 export const listarRegioes = () => axios.get(API_URL);
