@@ -36,19 +36,20 @@ export default function TabelaPontosTuristicos({
               <TableCell>Localização</TableCell>
               <TableCell>Cidade</TableCell>
               <TableCell>Estado</TableCell>
+              <TableCell>Data de Criação</TableCell> {/* Nova coluna */}
               <TableCell align="right">Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={7} align="center">
+                <TableCell colSpan={8} align="center">
                   <CircularProgress size={24} />
                 </TableCell>
               </TableRow>
             ) : rows.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} align="center">
+                <TableCell colSpan={8} align="center">
                   Nenhum registro encontrado.
                 </TableCell>
               </TableRow>
@@ -63,6 +64,17 @@ export default function TabelaPontosTuristicos({
                   </TableCell>
                   <TableCell>{row.cidade?.nome}</TableCell>
                   <TableCell>{row.cidade?.estado?.sigla}</TableCell>
+                  <TableCell>
+                    {row.dataCriacao
+                      ? new Date(row.dataCriacao).toLocaleDateString("pt-BR", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : ""}
+                  </TableCell>
                   <TableCell align="right">
                     <IconButton
                       color="primary"
@@ -91,7 +103,9 @@ export default function TabelaPontosTuristicos({
         page={page - 1}
         onPageChange={(_, newPage) => onPageChange(newPage + 1)}
         rowsPerPage={pageSize}
-        onRowsPerPageChange={(e) => onPageSizeChange(parseInt(e.target.value, 10))}
+        onRowsPerPageChange={(e) =>
+          onPageSizeChange(parseInt(e.target.value, 10))
+        }
         rowsPerPageOptions={[5, 10, 20, 50]}
       />
     </Box>
