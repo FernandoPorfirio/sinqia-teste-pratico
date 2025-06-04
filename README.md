@@ -8,7 +8,7 @@ O projeto consiste em uma aplicação para cadastro e listagem de pontos turíst
 ## 📂 Estrutura do Repositório
 
 - `Sinqia.Api/`: Backend em C#, responsável pelas regras de negócio e acesso ao banco de dados.
-- `front/`: Interface web desenvolvida com React.
+- `sinqia-app/`: Interface web desenvolvida com React.
 - `database/`: Scripts SQL e estrutura relacional.
 - `algoritmo/`: Algoritmo passo-a-passo para troca de pneu.
 
