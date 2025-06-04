@@ -3,7 +3,10 @@ import FiltrosPontosTuristicos from "./components/FiltrosPontosTuristicos";
 import TabelaPontosTuristicos from "./components/TabelaPontosTuristicos";
 import ModalPontoTuristico from "./components/ModalPontoTuristico";
 import ModalConfirmarExclusao from "./components/ModalConfirmarExclusao";
-import { listarPontosTuristicos, removerPontoTuristico } from "@/services/pontosTuristicosService";
+import {
+  listarPontosTuristicos,
+  removerPontoTuristico,
+} from "@/services/pontosTuristicosService";
 
 export default function PontosTuristicosContainer() {
   const [filtros, setFiltros] = useState({
@@ -30,6 +33,10 @@ export default function PontosTuristicosContainer() {
       .then((res) => {
         setDados(res.data.data);
         setTotal(res.data.total);
+      })
+      .catch(() => {
+        setDados([]);
+        setTotal(0);
       })
       .finally(() => setLoading(false));
   }, [filtros]);
